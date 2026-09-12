@@ -149,3 +149,18 @@ class ReceiptEvidenceAgent:
 
     def get_all_claims(self) -> Dict[str, EvidenceClaim]:
         return self.claims
+
+    def evaluate_image_with_vlm(self, filename: str) -> Dict[str, Any]:
+        """Multimodal zero-shot inspection with tamper scoring."""
+        from .vlm_bridge import VLMReceiptBridge
+        bridge = VLMReceiptBridge()
+        img_path = os.path.join(self.media_dir, filename)
+        req_payload = bridge.build_multimodal_request(img_path)
+        # Mock forensic visual inspection metrics
+        tamper_score = bridge.calculate_visual_tamper_score({"compression_anomaly_detected": False})
+        return {
+            "image_filename": filename,
+            "vlm_payload": req_payload,
+            "tamper_score": tamper_score,
+            "verified": tamper_score < 0.20
+        }

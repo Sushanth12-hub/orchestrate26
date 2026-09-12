@@ -265,6 +265,20 @@ class PlanGenerator:
 
         return combos
 
+    def optimize_spending_sacrifice(self, deficit: float) -> Dict[str, Any]:
+        """Calculates optimal budget sacrifice using Knapsack / Linear Programming."""
+        from .budget_optimizer import BudgetSacrificeOptimizer
+        optimizer = BudgetSacrificeOptimizer()
+        return optimizer.optimize_spending_cuts(self.simulator.category_monthly, deficit)
+
+    def schedule_multi_goal_portfolio(self, goals: List[Dict[str, Any]], start_date: str) -> Dict[str, Any]:
+        """Schedules concurrent competing goals across the 90-day cash-flow horizon."""
+        from .portfolio_scheduler import MultiGoalPortfolioScheduler
+        from datetime import datetime
+        start_d = datetime.strptime(start_date, "%Y-%m-%d").date()
+        scheduler = MultiGoalPortfolioScheduler(self.simulator, self.profile.minimum_balance_to_keep)
+        return scheduler.schedule_goal_portfolio(goals, start_d)
+
 def format_amt(val: float) -> str:
     if val == int(val):
         return str(int(val))

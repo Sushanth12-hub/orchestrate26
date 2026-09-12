@@ -293,3 +293,17 @@ class CashFlowSimulator:
                 earliest_date = d
                 break
         return amount_safe, earliest_date
+
+    def project_base_trajectory(self, request_date: str, horizon_days: int = 90) -> List[float]:
+        """Returns the 91-day projected balance trajectory."""
+        _, _, bals, _ = self.simulate_trajectory(request_date)
+        return bals
+
+    def simulate_stochastic_cushions(self, request_date: str) -> Dict[str, Any]:
+        """Runs Monte Carlo Cash-Flow at Risk simulation on the projected trajectory."""
+        from .stochastic_engine import StochasticCashFlowEngine
+        base_bals = self.project_base_trajectory(request_date)
+        engine = StochasticCashFlowEngine(num_simulations=500)
+        # Gather discretionary spending categories
+        disc_cats = {k: v for k, v in self.category_monthly.items() if k.lower() in ["dining", "entertainment", "shopping", "travel"]}
+        return engine.simulate_trajectories(base_bals, disc_cats)

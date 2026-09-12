@@ -125,6 +125,12 @@ class MessageAmendmentAgent:
     def get_user_amendments(self, user_id: str) -> List[MessageAmendment]:
         return self.user_amendments.get(user_id, [])
 
+    def classify_with_nli(self, text: str) -> Dict[str, Any]:
+        """Classifies message semantics and adversarial injection risk using NLI guard."""
+        from .nli_guard import NLIMessageGuard
+        guard = NLIMessageGuard()
+        return guard.classify_message(text)
+
 def pd_not_na(val):
     if val is None:
         return False
