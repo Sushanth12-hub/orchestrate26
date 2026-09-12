@@ -30,6 +30,19 @@ def package_submission(repo_root: str):
                 zipf.write(doc_path, doc)
                 print(f"  + {doc}")
 
+        # Add automated test suite
+        tests_dir = os.path.join(repo_root, "tests")
+        if os.path.exists(tests_dir):
+            for root, dirs, files in os.walk(tests_dir):
+                dirs[:] = [d for d in dirs if d not in ["__pycache__", ".pytest_cache"]]
+                for file in files:
+                    if file.endswith((".pyc", ".pyo")):
+                        continue
+                    full_path = os.path.join(root, file)
+                    rel_path = os.path.relpath(full_path, repo_root)
+                    zipf.write(full_path, rel_path)
+                    print(f"  + {rel_path}")
+
         # Ensure evaluation/usage_report.md exists at root level of zip as well
         eval_report = os.path.join(code_dir, "evaluation", "usage_report.md")
         if os.path.exists(eval_report):
