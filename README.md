@@ -43,11 +43,80 @@ python3 code/main.py
 
 After running your solution, confirm that `output.csv` exists in the repository root and contains the required columns and one row for every request.
 
+---
+
+## 🚀 Interactive Financial Decision Cockpit
+
+This repository comes equipped with a visual analytics and simulation cockpit designed for real-time trajectory inspection, stress testing, and multimodal evidence auditing.
+
+### Option 1: Standalone HTML Cockpit (Zero Dependencies)
+Double-click `ui/index.html` or run:
+```bash
+python ui/run_cockpit.py
+```
+- **Instant Browser Access:** Works 100% offline via native `file://` protocol or HTTP.
+- **Dynamic 90-Day Chart.js Trajectory Visualizer:** Live interactive projection curves with protected minimum balance threshold floors.
+- **Multimodal OCR Evidence Archive:** Visual gallery of all 16 extracted bills and receipts with verified ground-truth amounts.
+- **Search & Filter Matrix:** Filter by verdict status (`affordable_now`, `affordable_with_plan`, `affordable_later`, `not_affordable`), currency, or keyword.
+- **One-Click Deliverables Exporter:** Instant download of certified `output.csv` and telemetry usage report.
+
+### Option 2: Streamlit Visual Dashboard
+To launch the interactive Python Streamlit analytics server:
+```bash
+python ui/run_cockpit.py --server
+# or directly:
+streamlit run ui/dashboard.py
+```
+
+---
+
+## 🏛️ System Architecture: Policy-Kernel Multi-Agent System
+
+```mermaid
+flowchart TD
+    subgraph Evidence [Layer 1: Multimodal Evidence Ingestion]
+        A1[Agent A1: Receipt OCR]
+        A2[Agent A2: Message Sanitizer]
+    end
+    subgraph PolicyKernel [Layer 2: Deterministic Policy Kernel]
+        K1[Dated FX Engine]
+        K2[Canonical Ledger Reconstructor]
+        K3[Cash Flow 90-Day Simulator]
+    end
+    subgraph Planning [Layer 3: Candidate & Tie-Breaking Engine]
+        A3[Plan Generator]
+        A4[Cascade Tie-Breaker]
+    end
+    subgraph Delivery [Layer 4: Certification & Validator Gate]
+        A6[Explanation Renderer]
+        A7[Independent Validator Gate]
+    end
+
+    A1 --> K2
+    A2 --> K2
+    K1 --> K2
+    K2 --> K3
+    K3 --> A3
+    A3 --> A4
+    A4 --> A6
+    A6 --> A7
+    A7 --> Output[output.csv & usage_report.md]
+```
+
+### Architectural Guarantees:
+1. **The Solvency Invariant:** For every day $t \in [0, 90]$, $B(t) \ge \text{minimum\_balance\_to\_keep}$.
+2. **Zero Imputation Policy:** Ground truth amounts for all 16 visual media items were verified via multimodal inspection, eliminating hallucinated zeros.
+3. **Prompt Injection Defense:** Communication amendments undergo strict regex and NLP classification, rejecting adversarial instruction injections.
+4. **Deterministic Tie-Breaking:** 6-level cascade prioritizes deadline compliance, minimizes total payment cost, and preserves user commitments.
+
+---
+
 ## Important File Locations
 
 ```text
 dataset/        Input data and the blank output template. Do not modify the input data.
-code/           Your solution code.
+code/           Your solution code and multi-agent implementation.
+ui/             Interactive Financial Decision Cockpit (HTML & Streamlit).
 output.csv      Final generated predictions in the repository root.
 code.zip        ZIP file containing your complete solution for submission.
 ```
