@@ -60,18 +60,8 @@ class CanonicalLedger:
         self.amendments = amendments
 
     def get_opening_balance(self, request_date: str) -> float:
-        """Available cash minus any pending debits on or before request_date."""
-        req_dt = pd.to_datetime(request_date)
-        balance = self.profile.current_available_balance
-        
-        # Deduct pending debits
-        pending_debits = self.raw_events[
-            (self.raw_events["status"] == "pending") &
-            (self.raw_events["direction"] == "debit") &
-            (pd.to_datetime(self.raw_events["event_date"]) <= req_dt)
-        ]
-        total_pending = pending_debits["normalized_amount"].sum()
-        return balance - total_pending
+        """Available cash on request_date. Future pending debits are deducted on settlement_date in simulator."""
+        return self.profile.current_available_balance
 
     def get_candidate_pruning_events(self) -> List[Dict[str, Any]]:
         """Identify historical recurring events that the user is permitted to stop or reduce.

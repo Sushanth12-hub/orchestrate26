@@ -9,8 +9,8 @@
 
 - **Total Requests Evaluated:** 250
 - **Pipeline Execution Mode:** Deterministic Multi-Agent System (Hybrid Policy Kernel)
-- **Batch Processing Latency:** 95.21 seconds
-- **Average Latency per Request:** 0.3808 seconds
+- **Batch Processing Latency:** 56.86 seconds
+- **Average Latency per Request:** 0.2274 seconds
 - **Verification Invariant Status:** 100% Passed (Zero balance safety violations)
 
 ---

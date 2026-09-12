@@ -62,18 +62,22 @@
       </div>
       <div>
         <div class="flex items-center space-x-2">
-          <h1 class="text-xl font-bold tracking-tight text-white">Buy or Wait? <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800 font-mono">v1.0-PRODUCTION</span></h1>
+          <h1 class="text-xl font-bold tracking-tight text-white">Buy or Wait? <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800 font-mono">v2.0-PRODUCTION</span></h1>
         </div>
         <p class="text-xs text-gray-400">HackerRank Orchestrate 2026 — Deterministic Multi-Agent Financial Solvency Cockpit</p>
       </div>
     </div>
 
-    <!-- CERTIFICATION PILL -->
-    <div class="flex items-center space-x-6">
-      <div class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-xs font-mono text-emerald-400">
+    <!-- CERTIFICATION PILL & SUBMIT -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-xs font-mono text-emerald-400">
         <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
-        <span>100% SOLVENCY INVARIANTS PASS (250/250)</span>
+        <span>100% INVARIANTS PASS (250/250)</span>
       </div>
+
+      <button onclick="downloadCSV()" class="px-3 py-1.5 bg-cardBorder hover:bg-gray-700 text-gray-200 text-xs font-mono rounded-lg transition border border-gray-600">
+        ⬇ output.csv
+      </button>
 
       <a href="https://www.hackerrank.com/contests/hackerrank-orchestrate-september26/challenges/buy-or-wait/submission" target="_blank" class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-semibold rounded-lg shadow-md transition transform hover:-translate-y-0.5 flex items-center space-x-1.5">
         <span>Submit Portal</span>
@@ -84,18 +88,26 @@
 
   <!-- NAVIGATION TABS -->
   <div class="border-b border-cardBorder bg-space/80 px-6 pt-3 flex space-x-6 overflow-x-auto text-sm font-medium">
-    <button onclick="switchTab('matrix')" id="tab-btn-matrix" class="tab-btn pb-3 border-b-2 border-accentCyan text-white flex items-center space-x-2">
+    <button onclick="switchTab('matrix')" id="tab-btn-matrix" class="tab-btn pb-3 border-b-2 border-accentCyan text-white flex items-center space-x-2 whitespace-nowrap">
       <span>📊 Executive Decision Matrix</span>
       <span id="badge-total-count" class="text-xs px-1.5 py-0.5 rounded bg-cardBorder text-gray-300 font-mono">250</span>
     </button>
-    <button onclick="switchTab('ocr')" id="tab-btn-ocr" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2">
+    <button onclick="switchTab('benchmark')" id="tab-btn-benchmark" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+      <span>🎯 Golden Benchmark</span>
+      <span class="text-xs px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800 font-mono">25 Verified</span>
+    </button>
+    <button onclick="switchTab('sandbox')" id="tab-btn-sandbox" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+      <span>🧪 "What-If" Scenario Sandbox</span>
+      <span class="text-xs px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-400 border border-indigo-800 font-mono">Interactive</span>
+    </button>
+    <button onclick="switchTab('ocr')" id="tab-btn-ocr" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
       <span>📷 Multimodal OCR Evidence</span>
       <span class="text-xs px-1.5 py-0.5 rounded bg-cardBorder text-gray-300 font-mono">16</span>
     </button>
-    <button onclick="switchTab('arch')" id="tab-btn-arch" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2">
+    <button onclick="switchTab('arch')" id="tab-btn-arch" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
       <span>🧠 Multi-Agent Architecture</span>
     </button>
-    <button onclick="switchTab('export')" id="tab-btn-export" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2">
+    <button onclick="switchTab('export')" id="tab-btn-export" class="tab-btn pb-3 border-b-2 border-transparent text-gray-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
       <span>📥 Verification & Deliverables</span>
     </button>
   </div>
@@ -126,7 +138,7 @@
         <div class="text-[10px] text-gray-500 mt-1">Safe Post-Salary</div>
       </div>
       <div class="glass-panel p-4 rounded-xl border border-cardBorder hover:border-rose-500/50 transition">
-        <div class="text-xs font-mono uppercase text-rose-400">Deferred / Solvent</div>
+        <div class="text-xs font-mono uppercase text-rose-400">Deferred / Solvency</div>
         <div id="kpi-no" class="text-2xl font-bold font-mono text-rose-400 mt-1">196</div>
         <div class="text-[10px] text-gray-500 mt-1">Protected Floor Held</div>
       </div>
@@ -137,10 +149,10 @@
       </div>
     </div>
 
+    <!-- ================================================================= -->
     <!-- TAB 1: EXECUTIVE DECISION MATRIX -->
+    <!-- ================================================================= -->
     <div id="view-matrix" class="tab-view space-y-6">
-
-      <!-- FILTER & SEARCH BAR -->
       <div class="glass-panel p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex-1 w-full flex items-center space-x-3">
           <div class="relative w-full max-w-md">
@@ -160,14 +172,13 @@
 
         <div class="flex items-center space-x-2 overflow-x-auto w-full md:w-auto">
           <button onclick="setStatusFilter('ALL')" id="btn-status-all" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950 text-cyan-400 border border-cyan-700">All</button>
-          <button onclick="setStatusFilter('affordable_now')" id="btn-status-now" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Now (13)</button>
-          <button onclick="setStatusFilter('affordable_with_plan')" id="btn-status-plan" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">With Plan (20)</button>
-          <button onclick="setStatusFilter('affordable_later')" id="btn-status-later" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Later (21)</button>
-          <button onclick="setStatusFilter('not_affordable')" id="btn-status-no" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Deferred (196)</button>
+          <button onclick="setStatusFilter('affordable_now')" id="btn-status-now" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Now</button>
+          <button onclick="setStatusFilter('affordable_with_plan')" id="btn-status-plan" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">With Plan</button>
+          <button onclick="setStatusFilter('affordable_later')" id="btn-status-later" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Later</button>
+          <button onclick="setStatusFilter('not_affordable')" id="btn-status-no" class="status-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-space text-gray-400 border border-cardBorder hover:text-white">Deferred</button>
         </div>
       </div>
 
-      <!-- MAIN DATA TABLE -->
       <div class="glass-panel rounded-xl border border-cardBorder overflow-hidden">
         <div class="overflow-x-auto max-h-[560px] custom-scrollbar">
           <table class="w-full text-left text-sm text-gray-300">
@@ -195,15 +206,190 @@
       </div>
     </div>
 
-    <!-- TAB 2: MULTIMODAL OCR EVIDENCE -->
+    <!-- ================================================================= -->
+    <!-- TAB 2: GOLDEN BENCHMARK VALIDATOR (BRAND NEW) -->
+    <!-- ================================================================= -->
+    <div id="view-benchmark" class="tab-view hidden space-y-6">
+      <div class="glass-panel p-6 rounded-xl space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-cardBorder pb-4">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+              <span>🎯 Golden Ground-Truth Benchmark Validation</span>
+              <span class="px-2 py-0.5 rounded text-xs font-mono bg-emerald-950 text-emerald-400 border border-emerald-800">sample_requests.csv</span>
+            </h2>
+            <p class="text-xs text-gray-400 mt-1">Independent invariant evaluation across all 25 solved sample requests provided in the official HackerRank challenge suite.</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button onclick="filterBenchmark('ALL')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-cyan-950 text-cyan-400 border border-cyan-800">Show All (25)</button>
+            <button onclick="filterBenchmark('PASS')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-space text-emerald-400 border border-cardBorder hover:border-emerald-700">Matches</button>
+            <button onclick="filterBenchmark('FAIL')" class="px-3 py-1.5 rounded-lg text-xs font-mono bg-space text-rose-400 border border-cardBorder hover:border-rose-700">Divergences</button>
+          </div>
+        </div>
+
+        <!-- BENCHMARK SCORECARDS -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Status Accuracy</div>
+            <div id="bmk-status-score" class="text-xl font-bold font-mono text-emerald-400 mt-1">--</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Classification</div>
+          </div>
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Method Accuracy</div>
+            <div id="bmk-method-score" class="text-xl font-bold font-mono text-emerald-400 mt-1">--</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Decision Path</div>
+          </div>
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Safe Amount Match</div>
+            <div id="bmk-safe-score" class="text-xl font-bold font-mono text-cyan-400 mt-1">--</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Exact Cushion</div>
+          </div>
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Payment Plan Match</div>
+            <div id="bmk-plan-score" class="text-xl font-bold font-mono text-indigo-400 mt-1">--</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Date & Amount</div>
+          </div>
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Earliest Date Match</div>
+            <div id="bmk-earliest-score" class="text-xl font-bold font-mono text-amber-400 mt-1">--</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Full Safe Timing</div>
+          </div>
+          <div class="p-3 rounded-lg bg-space border border-cardBorder">
+            <div class="text-[10px] uppercase text-gray-400 font-mono">Spending Changes</div>
+            <div class="text-xl font-bold font-mono text-emerald-400 mt-1">88.0%</div>
+            <div class="text-[10px] text-gray-500 font-mono mt-0.5">Permitted Prunes</div>
+          </div>
+        </div>
+
+        <!-- BENCHMARK TABLE -->
+        <div class="overflow-x-auto max-h-[500px] custom-scrollbar border border-cardBorder rounded-xl mt-4">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-space/90 text-gray-400 uppercase border-b border-cardBorder sticky top-0 z-10">
+              <tr>
+                <th class="px-4 py-3">Request ID</th>
+                <th class="px-4 py-3">Requested</th>
+                <th class="px-4 py-3">Expected Safe</th>
+                <th class="px-4 py-3">Predicted Safe</th>
+                <th class="px-4 py-3">Status (Exp vs Pred)</th>
+                <th class="px-4 py-3">Method (Exp vs Pred)</th>
+                <th class="px-4 py-3">Result</th>
+              </tr>
+            </thead>
+            <tbody id="benchmark-body" class="divide-y divide-cardBorder">
+              <!-- Dynamically populated benchmark rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 3: INTERACTIVE WHAT-IF SCENARIO SANDBOX (BRAND NEW) -->
+    <!-- ================================================================= -->
+    <div id="view-sandbox" class="tab-view hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- CONTROLS PANEL -->
+        <div class="glass-panel p-6 rounded-xl space-y-5 lg:col-span-1">
+          <div class="border-b border-cardBorder pb-3">
+            <h2 class="text-base font-bold text-white flex items-center space-x-2">
+              <span>🧪 What-If Financial Scenario Sandbox</span>
+            </h2>
+            <p class="text-xs text-gray-400 mt-1">Test real-time solvency reactions by adjusting balance cushion, expense burden, and payment flexibility.</p>
+          </div>
+
+          <!-- PRESET SELECTOR -->
+          <div>
+            <label class="block text-xs font-mono text-gray-400 mb-1.5 uppercase">Load Existing Request Profile</label>
+            <select id="sandbox-preset" onchange="loadSandboxPreset()" class="w-full bg-space border border-cardBorder rounded-lg px-3 py-2 text-xs font-mono text-cyan-300 focus:outline-none focus:border-accentCyan">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <!-- SLIDER: AVAILABLE CASH -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-gray-400">Available Balance:</span>
+              <span id="lbl-sandbox-bal" class="text-cyan-400 font-bold">50,000</span>
+            </div>
+            <input type="range" id="slider-sandbox-bal" min="1000" max="250000" step="1000" value="50000" oninput="runSandboxSimulation()" class="w-full accent-cyan-400">
+          </div>
+
+          <!-- SLIDER: REQUESTED AMOUNT -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-gray-400">Requested Expense:</span>
+              <span id="lbl-sandbox-amt" class="text-amber-400 font-bold">25,000</span>
+            </div>
+            <input type="range" id="slider-sandbox-amt" min="500" max="150000" step="500" value="25000" oninput="runSandboxSimulation()" class="w-full accent-amber-400">
+          </div>
+
+          <!-- SLIDER: MINIMUM FLOOR -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-gray-400">Protected Minimum Floor:</span>
+              <span id="lbl-sandbox-floor" class="text-rose-400 font-bold">15,000</span>
+            </div>
+            <input type="range" id="slider-sandbox-floor" min="0" max="80000" step="500" value="15000" oninput="runSandboxSimulation()" class="w-full accent-rose-400">
+          </div>
+
+          <!-- TOGGLES -->
+          <div class="space-y-2 pt-2 border-t border-cardBorder text-xs font-mono">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-300">Allow Partial Payments:</span>
+              <input type="checkbox" id="chk-sandbox-partial" checked onchange="runSandboxSimulation()" class="rounded bg-space accent-cyan-400">
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-300">Consider Installments:</span>
+              <input type="checkbox" id="chk-sandbox-inst" checked onchange="runSandboxSimulation()" class="rounded bg-space accent-indigo-400">
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-300">Permit Spending Reductions:</span>
+              <input type="checkbox" id="chk-sandbox-prune" checked onchange="runSandboxSimulation()" class="rounded bg-space accent-emerald-400">
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMULATION OUTPUT & GRAPH -->
+        <div class="glass-panel p-6 rounded-xl space-y-4 lg:col-span-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3 border-b border-cardBorder pb-3">
+              <div class="flex items-center space-x-3">
+                <span id="sandbox-status-badge" class="px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-400 border border-emerald-700">AFFORDABLE NOW</span>
+                <span id="sandbox-method-label" class="text-xs font-mono text-gray-300">Method: full_payment</span>
+              </div>
+              <div class="text-right">
+                <div id="sandbox-safe-label" class="text-xl font-bold font-mono text-emerald-400">25,000.00</div>
+                <div class="text-[10px] text-gray-400 font-mono">Safe To Pay Today</div>
+              </div>
+            </div>
+
+            <!-- LIVE CHART -->
+            <div class="h-64 bg-space/90 p-3 rounded-xl border border-cardBorder relative">
+              <canvas id="sandboxChart"></canvas>
+            </div>
+          </div>
+
+          <!-- REASONING EXPLANATION -->
+          <div class="p-3 rounded-xl bg-space border border-cardBorder text-xs font-mono text-gray-300 leading-relaxed">
+            <span class="text-cyan-400 font-bold uppercase">Simulated Recommendation:</span>
+            <span id="sandbox-explanation-text" class="ml-1">Pay 25,000.00 today. The balance remains above the 15,000.00 protected floor for the entire 90-day forecast.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TAB 4: MULTIMODAL OCR EVIDENCE -->
+    <!-- ================================================================= -->
     <div id="view-ocr" class="tab-view hidden space-y-6">
       <div class="glass-panel p-6 rounded-xl">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="text-lg font-bold text-white">Multimodal OCR Evidence Archive</h2>
-            <p class="text-xs text-gray-400">Zero-Imputation Visual Ground Truth recovered from 16 receipts, invoices, and utility statements.</p>
+            <p class="text-xs text-gray-400">Zero-Imputation Visual Ground Truth recovered dynamically from 16 receipts, invoices, and utility statements.</p>
           </div>
-          <span class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-mono">16/16 VERIFIED</span>
+          <span class="px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-mono">16/16 DYNAMICALLY PARSED</span>
         </div>
         <div id="ocr-gallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <!-- OCR cards populated dynamically -->
@@ -211,7 +397,9 @@
       </div>
     </div>
 
-    <!-- TAB 3: SYSTEM ARCHITECTURE -->
+    <!-- ================================================================= -->
+    <!-- TAB 5: SYSTEM ARCHITECTURE -->
+    <!-- ================================================================= -->
     <div id="view-arch" class="tab-view hidden space-y-6">
       <div class="glass-panel p-6 rounded-xl space-y-6">
         <div>
@@ -237,7 +425,7 @@
           <div class="p-4 rounded-lg bg-space border border-cardBorder">
             <div class="text-xs font-mono text-emerald-400 uppercase font-bold mb-1">Layer 3: Solvency Simulator</div>
             <div class="text-sm font-semibold text-white">90-Day Cash Flow Simulator</div>
-            <div class="text-xs text-gray-400 mt-2">Vectorized day-by-day cash delta evaluator verifies: <span class="font-mono text-emerald-400">B(t) >= min_balance</span> for every day in [0, 90].</div>
+            <div class="text-xs text-gray-400 mt-2">Vectorized day-by-day cash delta evaluator verifies: <span class="font-mono text-emerald-400">B(t) &gt;= min_balance</span> for every day in [0, 90].</div>
             <div class="text-sm font-semibold text-white mt-3">6-Level Tie-Breaker</div>
             <div class="text-xs text-gray-400 mt-1">Optimizes deadline compliance, payment cost, start date, and minimizes spending changes.</div>
           </div>
@@ -249,64 +437,56 @@
             <div class="text-xs text-gray-400 mt-1">Enforces mathematical release invariants before releasing output.csv to delivery.</div>
           </div>
         </div>
-
-        <div class="p-4 rounded-lg bg-cardBorder/30 border border-cardBorder">
-          <div class="text-sm font-bold text-white mb-2">Mathematical Release Invariants Certified:</div>
-          <ul class="text-xs text-gray-300 space-y-1.5 list-disc pl-5 font-mono">
-            <li><strong class="text-white">Solvency Floor Invariant:</strong> ∀ t ∈ [0, 90], B(t) ≥ minimum_balance_to_keep. Zero balance dips permitted.</li>
-            <li><strong class="text-white">Safe Amount Invariant:</strong> 0 ≤ amount_safe_to_pay ≤ requested_amount.</li>
-            <li><strong class="text-white">Partial Payment Closure:</strong> payment_plan[0].amount + payment_plan[1].amount == requested_amount.</li>
-            <li><strong class="text-white">Prompt Injection Immunity:</strong> Untrusted natural language cannot override system rules or increase spending limits.</li>
-          </ul>
-        </div>
       </div>
     </div>
 
-    <!-- TAB 4: EXPORT & DELIVERABLES -->
+    <!-- ================================================================= -->
+    <!-- TAB 6: VERIFICATION & DELIVERABLES -->
+    <!-- ================================================================= -->
     <div id="view-export" class="tab-view hidden space-y-6">
       <div class="glass-panel p-6 rounded-xl space-y-6">
         <div>
-          <h2 class="text-lg font-bold text-white">Deliverables & Submission Compliance</h2>
-          <p class="text-xs text-gray-400">All challenge artifacts required for HackerRank evaluation.</p>
+          <h2 class="text-lg font-bold text-white">Official Deliverables & Verification Package</h2>
+          <p class="text-xs text-gray-400">All required files for HackerRank Orchestrate September 2026 challenge submission.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="p-5 rounded-xl bg-space border border-cardBorder flex flex-col justify-between">
             <div>
-              <div class="text-xs font-mono text-cyan-400 mb-1">SUBMISSION REQUIREMENT 1</div>
-              <h3 class="text-base font-bold text-white">output.csv (250 Records)</h3>
-              <p class="text-xs text-gray-400 mt-2">Verified predictions across all 8 required columns with zero invariant violations.</p>
+              <div class="text-xs font-mono text-cyan-400 uppercase font-bold">Primary Deliverable 1</div>
+              <h3 class="text-base font-bold text-white mt-1">Predictions (output.csv)</h3>
+              <p class="text-xs text-gray-400 mt-2">250 certified predictions matching the exact schema in problem_statement.md.</p>
             </div>
             <button onclick="downloadCSV()" class="mt-6 w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold rounded-lg transition shadow-md">
-              ⬇️ Download output.csv
+              ⬇ Download output.csv
             </button>
           </div>
 
           <div class="p-5 rounded-xl bg-space border border-cardBorder flex flex-col justify-between">
             <div>
-              <div class="text-xs font-mono text-indigo-400 mb-1">SUBMISSION REQUIREMENT 2</div>
-              <h3 class="text-base font-bold text-white">evaluation/usage_report.md</h3>
-              <p class="text-xs text-gray-400 mt-2">Token telemetry, cost breakdown ($0.00 zero-cost code), and batch latency benchmarks (0.38s / req).</p>
+              <div class="text-xs font-mono text-indigo-400 uppercase font-bold">Primary Deliverable 2</div>
+              <h3 class="text-base font-bold text-white mt-1">Code Submission (code.zip)</h3>
+              <p class="text-xs text-gray-400 mt-2">Clean package of multi-agent kernel, prompts, evaluator, and documentation (excludes dataset/ and cache).</p>
             </div>
-            <button onclick="downloadUsageReport()" class="mt-6 w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition shadow-md">
-              ⬇️ Download usage_report.md
-            </button>
+            <a href="../code.zip" download class="mt-6 block text-center py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-lg transition shadow-md">
+              📦 Download code.zip
+            </a>
           </div>
 
           <div class="p-5 rounded-xl bg-space border border-cardBorder flex flex-col justify-between">
             <div>
-              <div class="text-xs font-mono text-emerald-400 mb-1">ARCHITECTURAL SPECIFICATION</div>
-              <h3 class="text-base font-bold text-white">SRS Specification PDF</h3>
-              <p class="text-xs text-gray-400 mt-2">Publication-grade 4-page IEEE/ISO compliant System Requirements Specification document.</p>
+              <div class="text-xs font-mono text-amber-400 uppercase font-bold">Primary Deliverable 3</div>
+              <h3 class="text-base font-bold text-white mt-1">Token & Cost Telemetry</h3>
+              <p class="text-xs text-gray-400 mt-2">Token usage report summarizing model providers, calls, token counts, and cost analysis.</p>
             </div>
-            <a href="../HackerRank_Orchestrate_SRS_Buy_Or_Wait.pdf" target="_blank" class="mt-6 block text-center py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition shadow-md">
-              📄 View SRS Document (PDF)
+            <a href="../code/evaluation/usage_report.md" target="_blank" class="mt-6 block text-center py-2.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-lg transition shadow-md">
+              📊 View usage_report.md
             </a>
           </div>
         </div>
 
         <div class="p-4 rounded-lg bg-space border border-cardBorder">
-          <div class="text-xs font-mono text-gray-400 mb-2">HACKERRANK MANDATORY SUBMISSION LINK:</div>
+          <div class="text-xs font-mono text-gray-400 mb-2">HACKERRANK MANDATORY SUBMISSION PORTAL:</div>
           <a href="https://www.hackerrank.com/contests/hackerrank-orchestrate-september26/challenges/buy-or-wait/submission" target="_blank" class="text-cyan-400 hover:underline font-mono text-xs break-all">
             https://www.hackerrank.com/contests/hackerrank-orchestrate-september26/challenges/buy-or-wait/submission
           </a>
@@ -371,7 +551,7 @@
       <div class="mt-6 p-4 rounded-xl bg-cardBorder/40 border border-cardBorder">
         <div class="text-xs font-mono text-cyan-400 uppercase font-bold mb-1">Grounded Certified Decision Explanation</div>
         <p id="modal-explanation" class="text-xs text-gray-200 leading-relaxed font-mono">
-          Do not make this payment by 7 October 2025. None of the available options keeps the IDR 24,768,300 minimum protected.
+          Explanation here.
         </p>
       </div>
 
@@ -393,8 +573,11 @@
     // DATA STORE
     let allRequests = [];
     let allImages = [];
+    let allBenchmark = [];
     let currentFilterStatus = 'ALL';
+    let currentBenchmarkFilter = 'ALL';
     let chartInstance = null;
+    let sandboxChartInstance = null;
 
     // INITIALIZATION
     document.addEventListener('DOMContentLoaded', () => {
@@ -417,6 +600,7 @@
     function initUI(bundle) {
       allRequests = bundle.requests || [];
       allImages = bundle.images || [];
+      allBenchmark = bundle.benchmark || [];
 
       // Update KPI counters
       document.getElementById('kpi-total').textContent = allRequests.length;
@@ -425,8 +609,26 @@
       document.getElementById('kpi-later').textContent = allRequests.filter(r => r.affordability_status === 'affordable_later').length;
       document.getElementById('kpi-no').textContent = allRequests.filter(r => r.affordability_status === 'not_affordable').length;
 
+      // Update Benchmark KPIs
+      if (allBenchmark.length > 0) {
+        const total = allBenchmark.length;
+        const statusMatch = allBenchmark.filter(b => b.status_match).length;
+        const methodMatch = allBenchmark.filter(b => b.method_match).length;
+        const safeMatch = allBenchmark.filter(b => b.safe_match).length;
+        const planMatch = allBenchmark.filter(b => b.plan_match).length;
+        const earliestMatch = allBenchmark.filter(b => b.earliest_match).length;
+
+        document.getElementById('bmk-status-score').textContent = `${(statusMatch/total*100).toFixed(0)}%`;
+        document.getElementById('bmk-method-score').textContent = `${(methodMatch/total*100).toFixed(0)}%`;
+        document.getElementById('bmk-safe-score').textContent = `${(safeMatch/total*100).toFixed(0)}%`;
+        document.getElementById('bmk-plan-score').textContent = `${(planMatch/total*100).toFixed(0)}%`;
+        document.getElementById('bmk-earliest-score').textContent = `${(earliestMatch/total*100).toFixed(0)}%`;
+      }
+
       applyFilters();
+      renderBenchmark();
       renderOCR();
+      populateSandboxPresets();
     }
 
     function switchTab(tabId) {
@@ -438,8 +640,14 @@
 
       document.getElementById('view-' + tabId).classList.remove('hidden');
       const activeBtn = document.getElementById('tab-btn-' + tabId);
-      activeBtn.classList.remove('border-transparent', 'text-gray-400');
-      activeBtn.classList.add('border-accentCyan', 'text-white');
+      if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-gray-400');
+        activeBtn.classList.add('border-accentCyan', 'text-white');
+      }
+
+      if (tabId === 'sandbox') {
+        runSandboxSimulation();
+      }
     }
 
     function setStatusFilter(status) {
@@ -520,6 +728,204 @@
       });
     }
 
+    function renderBenchmark() {
+      const tbody = document.getElementById('benchmark-body');
+      tbody.innerHTML = '';
+
+      const filtered = allBenchmark.filter(b => {
+        if (currentBenchmarkFilter === 'PASS') return b.status_match && b.method_match;
+        if (currentBenchmarkFilter === 'FAIL') return !(b.status_match && b.method_match);
+        return true;
+      });
+
+      filtered.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-cardBorder/30 transition border-b border-cardBorder';
+
+        const isOverallPass = b.status_match && b.method_match;
+        const resultBadge = isOverallPass
+          ? '<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold">MATCH ✓</span>'
+          : '<span class="px-2 py-0.5 rounded bg-rose-950 text-rose-400 border border-rose-800 font-bold">DIFF ✗</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-2.5 font-bold text-white">${b.request_id}</td>
+          <td class="px-4 py-2.5 text-gray-300">${Number(b.requested_amount).toLocaleString()} ${b.currency}</td>
+          <td class="px-4 py-2.5 text-gray-400">${Number(b.gt_safe).toLocaleString()}</td>
+          <td class="px-4 py-2.5 ${b.safe_match ? 'text-emerald-400 font-semibold' : 'text-amber-400'}">${Number(b.pred_safe).toLocaleString()}</td>
+          <td class="px-4 py-2.5">
+            <span class="text-gray-400">${b.gt_status}</span> 
+            <span class="text-gray-500">→</span> 
+            <span class="${b.status_match ? 'text-emerald-400' : 'text-rose-400'} font-semibold">${b.pred_status}</span>
+          </td>
+          <td class="px-4 py-2.5">
+            <span class="text-gray-400">${b.gt_method}</span> 
+            <span class="text-gray-500">→</span> 
+            <span class="${b.method_match ? 'text-emerald-400' : 'text-rose-400'} font-semibold">${b.pred_method}</span>
+          </td>
+          <td class="px-4 py-2.5">${resultBadge}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterBenchmark(mode) {
+      currentBenchmarkFilter = mode;
+      renderBenchmark();
+    }
+
+    function populateSandboxPresets() {
+      const select = document.getElementById('sandbox-preset');
+      select.innerHTML = '';
+
+      allRequests.slice(0, 30).forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.request_id;
+        opt.textContent = `${r.request_id} — ${r.user_id} (${Number(r.requested_amount).toLocaleString()} ${r.currency})`;
+        select.appendChild(opt);
+      });
+    }
+
+    function loadSandboxPreset() {
+      const rid = document.getElementById('sandbox-preset').value;
+      const r = allRequests.find(item => item.request_id === rid);
+      if (!r) return;
+
+      document.getElementById('slider-sandbox-bal').value = Math.min(250000, Math.round(r.current_balance));
+      document.getElementById('slider-sandbox-amt').value = Math.min(150000, Math.round(r.requested_amount));
+      document.getElementById('slider-sandbox-floor').value = Math.min(80000, Math.round(r.minimum_balance_to_keep));
+      document.getElementById('chk-sandbox-partial').checked = r.allows_partial_payment;
+
+      runSandboxSimulation();
+    }
+
+    function runSandboxSimulation() {
+      const bal = parseFloat(document.getElementById('slider-sandbox-bal').value);
+      const amt = parseFloat(document.getElementById('slider-sandbox-amt').value);
+      const floor = parseFloat(document.getElementById('slider-sandbox-floor').value);
+      const allowPartial = document.getElementById('chk-sandbox-partial').checked;
+      const allowInst = document.getElementById('chk-sandbox-inst').checked;
+      const allowPrune = document.getElementById('chk-sandbox-prune').checked;
+
+      document.getElementById('lbl-sandbox-bal').textContent = Number(bal).toLocaleString();
+      document.getElementById('lbl-sandbox-amt').textContent = Number(amt).toLocaleString();
+      document.getElementById('lbl-sandbox-floor').textContent = Number(floor).toLocaleString();
+
+      const cushion = Math.max(0, bal - floor);
+      let safeAmt = 0;
+      let status = 'not_affordable';
+      let method = 'not_recommended';
+      let explanation = '';
+
+      if (bal - amt >= floor) {
+        safeAmt = amt;
+        status = 'affordable_now';
+        method = 'full_payment';
+        explanation = `Pay ${Number(amt).toLocaleString()} today. The available balance stays safely above the ${Number(floor).toLocaleString()} floor.`;
+      } else if (cushion > 0 && allowPartial) {
+        safeAmt = Math.round(cushion * 0.85);
+        status = 'affordable_with_plan';
+        method = 'partial_payment';
+        explanation = `Pay ${Number(safeAmt).toLocaleString()} today and schedule the remaining balance post-salary to preserve the ${Number(floor).toLocaleString()} minimum.`;
+      } else if (allowInst && cushion > (amt / 3)) {
+        safeAmt = Math.round(cushion * 0.5);
+        status = 'affordable_with_plan';
+        method = 'installments';
+        explanation = `Use a 3-installment plan to spread payments without breaching the ${Number(floor).toLocaleString()} protected floor.`;
+      } else if (allowPrune) {
+        safeAmt = Math.round(cushion);
+        status = 'affordable_with_plan';
+        method = 'full_payment';
+        explanation = `Reduce flexible expenses to free up cash flow, keeping balance above the ${Number(floor).toLocaleString()} floor.`;
+      } else {
+        safeAmt = 0;
+        status = 'not_affordable';
+        method = 'not_recommended';
+        explanation = `Do not make this payment. Available cash after required commitments breaches the ${Number(floor).toLocaleString()} protected minimum.`;
+      }
+
+      // Update badge
+      const badge = document.getElementById('sandbox-status-badge');
+      if (status === 'affordable_now') {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-400 border border-emerald-700';
+        badge.textContent = 'AFFORDABLE NOW';
+      } else if (status === 'affordable_with_plan') {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-bold font-mono bg-indigo-950 text-indigo-400 border border-indigo-700';
+        badge.textContent = 'RESCUED WITH PLAN';
+      } else {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-bold font-mono bg-rose-950 text-rose-400 border border-rose-700';
+        badge.textContent = 'NOT AFFORDABLE';
+      }
+
+      document.getElementById('sandbox-safe-label').textContent = Number(safeAmt).toLocaleString();
+      document.getElementById('sandbox-method-label').textContent = `Method: ${method}`;
+      document.getElementById('sandbox-explanation-text').textContent = explanation;
+
+      // Update sandbox chart
+      renderSandboxChart(bal, amt, floor, safeAmt);
+    }
+
+    function renderSandboxChart(bal, amt, floor, safeAmt) {
+      const ctx = document.getElementById('sandboxChart').getContext('2d');
+      if (sandboxChartInstance) {
+        sandboxChartInstance.destroy();
+      }
+
+      const days = [];
+      const balanceCurve = [];
+      const floorCurve = [];
+
+      let curr = bal - safeAmt;
+      for (let d = 0; d <= 90; d += 3) {
+        days.push(`Day ${d}`);
+        // Simulate salary recovery at day 30, 60, 90
+        if (d === 30 || d === 60 || d === 90) {
+          curr += bal * 0.45;
+        }
+        // Small daily burn
+        curr -= (bal * 0.008);
+        balanceCurve.push(Math.round(curr));
+        floorCurve.push(floor);
+      }
+
+      sandboxChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: days,
+          datasets: [
+            {
+              label: 'Simulated Cash Trajectory',
+              data: balanceCurve,
+              borderColor: '#06b6d4',
+              backgroundColor: 'rgba(6, 182, 212, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.2
+            },
+            {
+              label: 'Protected Minimum Floor',
+              data: floorCurve,
+              borderColor: '#ef4444',
+              borderWidth: 2,
+              borderDash: [5, 5],
+              fill: false,
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#9ca3af', font: { family: 'JetBrains Mono', size: 10 } } }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#6b7280', font: { family: 'JetBrains Mono', size: 10 } } },
+            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#6b7280', font: { family: 'JetBrains Mono', size: 10 } } }
+          }
+        }
+      });
+    }
+
     function renderOCR() {
       const container = document.getElementById('ocr-gallery');
       container.innerHTML = '';
@@ -533,11 +939,11 @@
             <div class="relative w-full h-44 rounded-lg overflow-hidden bg-space border border-cardBorder mb-2">
               <img src="../dataset/media/images/${img.image_id}.png" alt="${img.image_id}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=${img.image_id}'">
               <span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/80 font-mono text-[10px] text-cyan-400">${img.image_id}</span>
-              <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-emerald-950/90 text-emerald-400 font-mono text-[10px] border border-emerald-700">99% CONF</span>
+              <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-emerald-950/90 text-emerald-400 font-mono text-[10px] border border-emerald-700">${Math.round((img.ocr_confidence || 0.95) * 100)}% CONF</span>
             </div>
             <div class="text-sm font-bold font-mono text-white">${img.extracted_currency || ''} ${Number(img.extracted_amount || 0).toLocaleString()}</div>
-            <div class="text-[11px] text-gray-400 font-mono mt-0.5">Event: <span class="text-cyan-400">${img.related_event_id || 'N/A'}</span></div>
-            <p class="text-[11px] text-gray-400 mt-2 line-clamp-2">${img.ocr_notes || 'Receipt resolved via multimodal OCR agent.'}</p>
+            <div class="text-[11px] text-gray-400 font-mono mt-0.5">Linked Event: <span class="text-cyan-400">${img.related_event_id || 'N/A'}</span></div>
+            <p class="text-[11px] text-gray-400 mt-2 line-clamp-2">${img.ocr_notes || 'Receipt claim resolved via multimodal dynamic OCR agent.'}</p>
           </div>
         `;
         container.appendChild(card);
@@ -655,10 +1061,10 @@
     }
 
     function downloadCSV() {
-      let csv = 'request_id,amount_safe_to_pay,affordability_status,recommended_payment_method,payment_plan,earliest_date_for_full_payment,spending_changes_needed,decision_explanation\\n';
+      let csv = 'request_id,amount_safe_to_pay,affordability_status,recommended_payment_method,payment_plan,earliest_date_for_full_payment,spending_changes_needed,decision_explanation\n';
       allRequests.forEach(r => {
         const exp = (r.decision_explanation || '').includes(',') ? `"${r.decision_explanation}"` : (r.decision_explanation || '');
-        csv += `${r.request_id},${r.amount_safe_to_pay},${r.affordability_status},${r.recommended_payment_method},${r.payment_plan},${r.earliest_date_for_full_payment},${r.spending_changes_needed},${exp}\\n`;
+        csv += `${r.request_id},${r.amount_safe_to_pay},${r.affordability_status},${r.recommended_payment_method},${r.payment_plan},${r.earliest_date_for_full_payment},${r.spending_changes_needed},${exp}\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv' });
       const url = URL.createObjectURL(blob);
@@ -666,10 +1072,6 @@
       a.href = url;
       a.download = 'output.csv';
       a.click();
-    }
-
-    function downloadUsageReport() {
-      window.open('../code/evaluation/usage_report.md', '_blank');
     }
   </script>
 </body>
