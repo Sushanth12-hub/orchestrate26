@@ -52,10 +52,11 @@ class PlanGenerator:
         user_methods = self.profile.payment_methods_user_will_consider
         req_options = self.options_df[self.options_df["request_id"] == req_id].copy()
 
-        # 1. CANDIDATE: Full Payment Today
         if "full_payment" in user_methods:
-            # Check 0-spending changes
-            safe_now, _, _, _ = self.simulator.simulate_trajectory(req_date, payment_schedule={req_date: req_amt})
+            # Check 0-spending changes: only valid if safe amount covers the requested expenditure
+            safe_now = False
+            if amount_safe_to_pay >= req_amt:
+                safe_now, _, _, _ = self.simulator.simulate_trajectory(req_date, payment_schedule={req_date: req_amt})
             if safe_now:
                 candidate_plans.append(CandidatePlan(
                     plan_id="full_now_base",

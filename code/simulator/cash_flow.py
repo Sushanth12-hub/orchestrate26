@@ -5,16 +5,16 @@ enabling sub-millisecond 90-day trajectory simulations.
 
 Key design principles:
   1. Salary: Detects confirmed salary, accounts for explicit message amendments (override,
-     date change, salary ended, unconfirmed gig alerts), and respects employment termination
-     (e.g., 'Final employer payroll').
+     date change, salary ended), and respects employment termination (e.g., 'Final employer payroll').
+     Unconfirmed bonus alerts do not wipe out regular base salary.
   2. Recurring expenses: Deduplicates by description. Subscriptions and debt payments are
      strictly recurring. Essential fixed categories (rent, utilities, insurance, healthcare,
      housing, education, family_support) and regular variable living expenses (groceries,
      transport, dining) are preserved based on historical consistency.
   3. First-month settlement: Debits whose settlement day <= request_date.day are already
      reflected in current_available_balance and are not double-deducted in month 0.
-  4. 90-day trajectory: Projects day-by-day balance, ensuring minimum_balance_to_keep
-     is never breached.
+  4. Pre-salary bottleneck & 90-day trajectory: Safe amount is constrained by the tighter
+     of the pre-payday liquidity bottleneck and the 90-day forward trajectory floor.
 """
 from typing import Dict, List, Optional, Tuple, Any
 from datetime import datetime, timedelta
@@ -45,7 +45,6 @@ class CashFlowSimulator:
         sal_override = None
         sal_day = None
         sal_ended = False
-        unconfirmed = False
 
         for a in self.ledger.amendments:
             if a.amendment_type == "salary_override":
@@ -54,8 +53,6 @@ class CashFlowSimulator:
                 sal_day = int(pd.to_datetime(a.value).day)
             if a.amendment_type == "salary_ended":
                 sal_ended = True
-            if a.amendment_type == "unconfirmed_credit_alert":
-                unconfirmed = True
 
         # Check if last salary was "final"
         if not salaries.empty:
@@ -74,14 +71,14 @@ class CashFlowSimulator:
                 elif not salaries.empty:
                     self.salary_day = int(pd.to_datetime(salaries["settlement_date"]).dt.day.mode().iloc[0])
             elif not salaries.empty:
-                if not unconfirmed or len(salaries) > 10:
+                m_day = int(pd.to_datetime(salaries["settlement_date"]).dt.day.mode().iloc[0])
+                regular_sal = salaries[pd.to_datetime(salaries["settlement_date"]).dt.day == m_day]
+                if not regular_sal.empty:
+                    self.salary_amt = float(regular_sal["normalized_amount"].iloc[-1])
+                else:
                     self.salary_amt = float(salaries.sort_values("settlement_date").iloc[-1]["normalized_amount"])
-                    if sal_day:
-                        self.salary_day = sal_day
-                    else:
-                        self.salary_day = int(pd.to_datetime(salaries["settlement_date"]).dt.day.mode().iloc[0])
+                self.salary_day = sal_day if sal_day else m_day
 
-        # Backward compatibility
         self.salary_streams = [(self.salary_amt, self.salary_day)] if self.salary_amt > 0 else []
 
         # ── 2. Recurring debits ──────────────────────────────────────────
@@ -235,10 +232,54 @@ class CashFlowSimulator:
         desired_completion_date: str,
     ) -> Tuple[float, Optional[str]]:
         start_dt = pd.to_datetime(request_date)
-        _, min_cushion, _, _ = self.simulate_trajectory(request_date)
-        amount_safe = max(0.0, min(requested_amount, min_cushion))
+
+        # 1. Pre-salary liquidity bottleneck calculation
+        raw = self.raw_events.copy()
+        raw["sdate"] = pd.to_datetime(raw["settlement_date"])
+        prev_m_end = start_dt.replace(day=1) - pd.Timedelta(days=1)
+        prev_m_start = prev_m_end.replace(day=1)
+
+        payday = self.salary_day
+        prev_debits = raw[
+            (raw["direction"] == "debit")
+            & (raw["status"] == "settled")
+            & (raw["sdate"] >= prev_m_start)
+            & (raw["sdate"] <= prev_m_end)
+        ].copy()
+
+        if payday > start_dt.day:
+            in_win = prev_debits[
+                (prev_debits["sdate"].dt.day > start_dt.day)
+                & (prev_debits["sdate"].dt.day <= payday)
+            ]
+            win_sum = float(in_win["normalized_amount"].sum())
+        else:
+            in_win1 = prev_debits[prev_debits["sdate"].dt.day > start_dt.day]
+            in_win2 = prev_debits[prev_debits["sdate"].dt.day <= payday]
+            win_sum = float(in_win1["normalized_amount"].sum() + in_win2["normalized_amount"].sum())
+
+        pending = raw[
+            (raw["direction"] == "debit")
+            & (raw["status"].isin(["pending", "scheduled"]))
+        ]
+        pend_sum = float(pending["normalized_amount"].sum())
+
+        opening_bal = self.ledger.get_opening_balance(request_date)
+        pre_salary_commit = win_sum + pend_sum
+        cushion = opening_bal - self.min_balance - pre_salary_commit
+
+        # Full 90-day simulation
+        _, sim_min_cushion, _, _ = self.simulate_trajectory(request_date)
+
+        if self.salary_amt > 0:
+            effective_cushion = min(cushion, sim_min_cushion)
+        else:
+            effective_cushion = sim_min_cushion
+
+        amount_safe = max(0.0, min(requested_amount, effective_cushion))
         amount_safe = round(amount_safe, 2)
 
+        # 2. Earliest date for full payment
         earliest_date = None
         dates = [
             (start_dt + timedelta(days=d)).strftime("%Y-%m-%d")
